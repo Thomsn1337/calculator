@@ -1,0 +1,10 @@
+#+title: Calculator
+
+** About this project
+
+This is a simple GUI calculator which can do basic mathematical operations (add, subtract, multiply, divide). This is the final project of the foundations course of the Odin Project.
+
+** Links
+
++ [[https://www.theodinproject.com/about][About Odin]]
++ [[https://www.theodinproject.com/lessons/foundations-calculator][Assignment page]]
