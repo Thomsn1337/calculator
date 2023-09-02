@@ -36,7 +36,7 @@ const handleNumberInput = value => {
 };
 
 const handleCommaInput = () => {
-  if (mathError) clearMem();
+  if (solutionSet || mathError) clearMem();
   if (!numberInput.includes(".")) {
     numberInput += ".";
   }

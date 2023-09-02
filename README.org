@@ -6,5 +6,6 @@ This is a simple GUI calculator which can do basic mathematical operations (add,
 
 ** Links
 
++ [[https://thomsn1337.github.io/calculator/][Preview]]
 + [[https://www.theodinproject.com/about][About Odin]]
 + [[https://www.theodinproject.com/lessons/foundations-calculator][Assignment page]]
