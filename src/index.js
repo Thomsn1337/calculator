@@ -4,6 +4,8 @@ let firstNumber = 0;
 let secondNumber = 0;
 let solution = 0;
 let operator = "";
+let operatorSet = false;
+let solutionSet = false;
 
 // DOM elements
 const numberButtons = document.querySelectorAll(".number");
@@ -15,25 +17,95 @@ const negateButton = document.querySelector("#negate");
 const clearButton = document.querySelector("#clear");
 const deleteButton = document.querySelector("#delete");
 
+const equalButton = document.querySelector("#equals");
+
 const screenInputVal = document.querySelector("#value");
 const screenEquationVal = document.querySelector("#equation");
 
 screenInputVal.textContent = numberInput;
 
 // Function definitions
-const handleOperatorClick = e => {
-  firstNumber = Number(numberInput);
+const handleOperatorInput = (e) => {
+  if (operatorSet) {
+    secondNumber = Number(numberInput);
+    firstNumber = solveEquation(operator, firstNumber, secondNumber);
+  }
+  else firstNumber = Number(numberInput);
   operator = e.target.textContent;
+  operatorSet = true;
+  solutionSet = false;
 
-  screenEquationVal.textContent = `${firstNumber} ${operator}`
+  screenEquationVal.textContent = `${firstNumber} ${operator}`;
   numberInput = "0";
   screenInputVal.textContent = numberInput;
-}
+};
+
+const solveEquation = (operator, a, b) => {
+  operatorSet = false;
+  switch (operator) {
+    case "+":
+      return a + b;
+
+    case "−":
+      return a - b;
+
+    case "×":
+      return a * b;
+
+    case "÷":
+      if (b === 0) {
+        console.log("Division by 0 not allowed");
+        return "Math error";
+      }
+      return a / b;
+
+    case "%":
+      if (b === 0) {
+        console.log("Division by 0 not allowed");
+        return "Math error";
+      }
+      return a % b;
+
+    default:
+      return;
+  }
+};
+
+const displaySolution = () => {
+  if (!operatorSet) {
+    solution = Number(numberInput);
+    screenEquationVal.textContent = `${solution} =`;
+    screenInputVal.textContent = solution;
+  } else {
+    secondNumber = Number(numberInput);
+    solution = solveEquation(operator, firstNumber, secondNumber);
+    screenEquationVal.textContent = `${firstNumber} ${operator} ${secondNumber} =`;
+    screenInputVal.textContent = solution;
+  }
+
+  solutionSet = true;
+  numberInput = String(solution);
+};
+
+const clearMem = () => {
+  numberInput = "0";
+  firstNumber = 0;
+  secondNumber = 0;
+  solution = 0;
+  operator = "";
+  operatorSet = false;
+  solutionSet = false;
+
+  screenInputVal.textContent = numberInput;
+  screenEquationVal.textContent = "";
+};
 
 // Event listeners
-numberButtons.forEach(button => {
-  button.addEventListener("click", e => {
-    if (numberInput === "0" || numberInput === "-0") numberInput = numberInput.replace("0", "");
+numberButtons.forEach((button) => {
+  if (solutionSet) clearMem();
+  button.addEventListener("click", (e) => {
+    if (numberInput === "0" || numberInput === "-0")
+      numberInput = numberInput.replace("0", "");
     numberInput += e.target.textContent;
     screenInputVal.textContent = numberInput;
   });
@@ -50,26 +122,20 @@ negateButton.addEventListener("click", () => {
   if (numberInput.includes("-")) numberInput = numberInput.slice(1);
   else numberInput = "-" + numberInput;
   screenInputVal.textContent = numberInput;
-})
+});
 
-operatorButtons.forEach(button => {
-  button.addEventListener("click", handleOperatorClick);
-})
+operatorButtons.forEach((button) => {
+  button.addEventListener("click", handleOperatorInput);
+});
 
-clearButton.addEventListener("click", () => {
-  numberInput = "0";
-  firstNumber = 0;
-  secondNumber = 0;
-  solution = 0;
-  operator = "";
-
-  screenInputVal.textContent = numberInput;
-  screenEquationVal.textContent = "";
-})
+clearButton.addEventListener("click", clearMem);
 
 deleteButton.addEventListener("click", () => {
   numberInput = numberInput.slice(0, numberInput.length - 1);
-  if (numberInput === "" || numberInput === "-" || numberInput === "0") numberInput = "0";
+  if (numberInput === "" || numberInput === "-" || numberInput === "0")
+    numberInput = "0";
 
   screenInputVal.textContent = numberInput;
-})
+});
+
+equalButton.addEventListener("click", displaySolution);
