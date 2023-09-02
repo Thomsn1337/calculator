@@ -78,33 +78,41 @@ const handleDeleteInput = () => {
 
 const solveEquation = (operator, a, b) => {
   operatorSet = false;
+  let solution = 0;
+
   switch (operator) {
     case "+":
-      return a + b;
+      solution = a + b;
+      break;
 
     case "−":
-      return a - b;
+      solution = a - b;
+      break;
 
     case "×":
-      return a * b;
+      solution = a * b;
+      break;
 
     case "÷":
       if (b === 0) {
         mathError = true;
-        return "Math error";
+        solution = "Math error";
+        return solution;
       }
-      return a / b;
+      solution = a / b;
+      break;
 
     case "%":
       if (b === 0) {
         mathError = true;
-        return "Math error";
+        solution = "Math error";
+        return solution;
       }
-      return a % b;
-
-    default:
-      return;
+      solution = a % b;
+      break;
   }
+
+  return Math.round(solution * 1000) / 1000;
 };
 
 const displaySolution = () => {
