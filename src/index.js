@@ -26,6 +26,7 @@ screenInputVal.textContent = numberInput;
 
 // Function definitions
 const handleNumberInput = value => {
+  if (solutionSet) clearMem();
   if (numberInput === "0" || numberInput === "-0")
     numberInput = numberInput.replace("0", "");
   numberInput += value;
@@ -132,7 +133,6 @@ const clearMem = () => {
 
 // Event listeners
 numberButtons.forEach(button => {
-  if (solutionSet) clearMem();
   button.addEventListener("click", e => {
     handleNumberInput(e.target.textContent);
   });
