@@ -25,7 +25,6 @@ const screenEquationVal = document.querySelector("#equation");
 screenInputVal.textContent = numberInput;
 
 // Function definitions
-
 const handleNumberInput = value => {
   if (numberInput === "0" || numberInput === "-0")
     numberInput = numberInput.replace("0", "");
@@ -40,13 +39,21 @@ const handleCommaInput = () => {
   screenInputVal.textContent = numberInput;
 };
 
-const handleOperatorInput = e => {
+const convertOperator = operator => {
+  if (operator === "+") return "+";
+  if (operator === "-") return "−";
+  if (operator === "*") return "×";
+  if (operator === "/") return "÷";
+  if (operator === "%") return "%";
+};
+
+const handleOperatorInput = value => {
   if (operatorSet) {
     secondNumber = Number(numberInput);
     firstNumber = solveEquation(operator, firstNumber, secondNumber);
   }
   else firstNumber = Number(numberInput);
-  operator = e.target.textContent;
+  operator = value;
   operatorSet = true;
   solutionSet = false;
 
@@ -140,7 +147,9 @@ negateButton.addEventListener("click", () => {
 });
 
 operatorButtons.forEach((button) => {
-  button.addEventListener("click", handleOperatorInput);
+  button.addEventListener("click", e => {
+    handleOperatorInput(e.target.textContent);
+  });
 });
 
 clearButton.addEventListener("click", clearMem);
@@ -150,6 +159,12 @@ deleteButton.addEventListener("click", handleDeleteInput);
 equalButton.addEventListener("click", displaySolution);
 
 window.addEventListener("keydown", e => {
+  const operators = "+-*/%";
   const key = e.key;
   if (key >= 0 && key <= 9) handleNumberInput(key);
+  if (key === "," || key === ".") handleCommaInput();
+  if (key === "Backspace") handleDeleteInput();
+  if (key === "Escape" || key === "Delete") clearMem();
+  if (operators.includes(key)) handleOperatorInput(convertOperator(key));
+  if (key === "Enter") displaySolution();
 });
