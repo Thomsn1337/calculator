@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+
 :root {
   --base-color: #24273a;
   --text-color: #cad3f5;
@@ -47,6 +49,7 @@ main {
 }
 
 #display p {
+  font-family: "Roboto Mono", monospace;
   margin: 0 10px 0 10px;
   color: var(--text-color);
 }

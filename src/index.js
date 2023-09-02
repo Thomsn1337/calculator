@@ -27,6 +27,7 @@ screenInputVal.textContent = numberInput;
 // Function definitions
 const handleNumberInput = value => {
   if (solutionSet) clearMem();
+  if (numberInput.length >= 20) return;
   if (numberInput === "0" || numberInput === "-0")
     numberInput = numberInput.replace("0", "");
   numberInput += value;
@@ -159,6 +160,7 @@ deleteButton.addEventListener("click", handleDeleteInput);
 equalButton.addEventListener("click", displaySolution);
 
 window.addEventListener("keydown", e => {
+  e.preventDefault();
   const operators = "+-*/%";
   const key = e.key;
   if (key >= 0 && key <= 9) handleNumberInput(key);
