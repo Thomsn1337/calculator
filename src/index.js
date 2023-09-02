@@ -25,7 +25,22 @@ const screenEquationVal = document.querySelector("#equation");
 screenInputVal.textContent = numberInput;
 
 // Function definitions
-const handleOperatorInput = (e) => {
+
+const handleNumberInput = value => {
+  if (numberInput === "0" || numberInput === "-0")
+    numberInput = numberInput.replace("0", "");
+  numberInput += value;
+  screenInputVal.textContent = numberInput;
+};
+
+const handleCommaInput = () => {
+  if (!numberInput.includes(".")) {
+    numberInput += ".";
+  }
+  screenInputVal.textContent = numberInput;
+};
+
+const handleOperatorInput = e => {
   if (operatorSet) {
     secondNumber = Number(numberInput);
     firstNumber = solveEquation(operator, firstNumber, secondNumber);
@@ -37,6 +52,14 @@ const handleOperatorInput = (e) => {
 
   screenEquationVal.textContent = `${firstNumber} ${operator}`;
   numberInput = "0";
+  screenInputVal.textContent = numberInput;
+};
+
+const handleDeleteInput = () => {
+  numberInput = numberInput.slice(0, numberInput.length - 1);
+  if (numberInput === "" || numberInput === "-" || numberInput === "0")
+    numberInput = "0";
+
   screenInputVal.textContent = numberInput;
 };
 
@@ -101,22 +124,14 @@ const clearMem = () => {
 };
 
 // Event listeners
-numberButtons.forEach((button) => {
+numberButtons.forEach(button => {
   if (solutionSet) clearMem();
-  button.addEventListener("click", (e) => {
-    if (numberInput === "0" || numberInput === "-0")
-      numberInput = numberInput.replace("0", "");
-    numberInput += e.target.textContent;
-    screenInputVal.textContent = numberInput;
+  button.addEventListener("click", e => {
+    handleNumberInput(e.target.textContent);
   });
 });
 
-commaButton.addEventListener("click", () => {
-  if (!numberInput.includes(".")) {
-    numberInput += ".";
-  }
-  screenInputVal.textContent = numberInput;
-});
+commaButton.addEventListener("click", handleCommaInput);
 
 negateButton.addEventListener("click", () => {
   if (numberInput.includes("-")) numberInput = numberInput.slice(1);
@@ -130,12 +145,11 @@ operatorButtons.forEach((button) => {
 
 clearButton.addEventListener("click", clearMem);
 
-deleteButton.addEventListener("click", () => {
-  numberInput = numberInput.slice(0, numberInput.length - 1);
-  if (numberInput === "" || numberInput === "-" || numberInput === "0")
-    numberInput = "0";
-
-  screenInputVal.textContent = numberInput;
-});
+deleteButton.addEventListener("click", handleDeleteInput);
 
 equalButton.addEventListener("click", displaySolution);
+
+window.addEventListener("keydown", e => {
+  const key = e.key;
+  if (key >= 0 && key <= 9) handleNumberInput(key);
+});
