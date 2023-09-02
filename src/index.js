@@ -6,6 +6,7 @@ let solution = 0;
 let operator = "";
 let operatorSet = false;
 let solutionSet = false;
+let mathError = false;
 
 // DOM elements
 const numberButtons = document.querySelectorAll(".number");
@@ -26,7 +27,7 @@ screenInputVal.textContent = numberInput;
 
 // Function definitions
 const handleNumberInput = value => {
-  if (solutionSet) clearMem();
+  if (solutionSet || mathError) clearMem();
   if (numberInput.length >= 20) return;
   if (numberInput === "0" || numberInput === "-0")
     numberInput = numberInput.replace("0", "");
@@ -35,6 +36,7 @@ const handleNumberInput = value => {
 };
 
 const handleCommaInput = () => {
+  if (mathError) clearMem();
   if (!numberInput.includes(".")) {
     numberInput += ".";
   }
@@ -50,6 +52,7 @@ const convertOperator = operator => {
 };
 
 const handleOperatorInput = value => {
+  if (mathError) clearMem();
   if (operatorSet) {
     secondNumber = Number(numberInput);
     firstNumber = solveEquation(operator, firstNumber, secondNumber);
@@ -65,6 +68,7 @@ const handleOperatorInput = value => {
 };
 
 const handleDeleteInput = () => {
+  if (mathError) clearMem();
   numberInput = numberInput.slice(0, numberInput.length - 1);
   if (numberInput === "" || numberInput === "-" || numberInput === "0")
     numberInput = "0";
@@ -86,14 +90,14 @@ const solveEquation = (operator, a, b) => {
 
     case "÷":
       if (b === 0) {
-        console.log("Division by 0 not allowed");
+        mathError = true;
         return "Math error";
       }
       return a / b;
 
     case "%":
       if (b === 0) {
-        console.log("Division by 0 not allowed");
+        mathError = true;
         return "Math error";
       }
       return a % b;
@@ -104,6 +108,7 @@ const solveEquation = (operator, a, b) => {
 };
 
 const displaySolution = () => {
+  if (mathError) clearMem();
   if (!operatorSet) {
     solution = Number(numberInput);
     screenEquationVal.textContent = `${solution} =`;
@@ -127,6 +132,7 @@ const clearMem = () => {
   operator = "";
   operatorSet = false;
   solutionSet = false;
+  mathError = false;
 
   screenInputVal.textContent = numberInput;
   screenEquationVal.textContent = "";
